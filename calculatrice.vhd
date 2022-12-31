@@ -32,12 +32,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity calculatrice is
-    Port ( RESET : in STD_LOGIC;
+    Port (
            clk : in STD_LOGIC);
 end calculatrice;
 
 architecture Behavioral of calculatrice is
 
+signal RESET : STD_LOGIC;
 signal Chiffre : Std_Logic_Vector (3 downto 0);
 signal Nb1 : Std_Logic_Vector (15 downto 0);
 signal Nb2 : Std_Logic_Vector (15 downto 0);

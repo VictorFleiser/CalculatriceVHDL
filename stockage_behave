@@ -1,0 +1,117 @@
+
+	if (chiffre = 0000 || 0001 || 0010 || 0011 || 0100 || 0101 || 0110 || 0111 || 1000 || 1001)						//nombre
+	{
+		if (progress = 2)  						//RESET
+		{
+			reset = 1
+		}
+		elseif (progress = 0)
+		{	
+			modeReg1 = 1 						//decal left valNB1
+			modeReg2 = 0 						//ne change pas valNB2
+			valNB1(0) = chiffre
+		}
+		else									//progress = 1
+		{
+			modeReg1 = 0 						//ne change pas valNB1
+			decal left valNB2
+			valNB2(0) = chiffre
+		}
+	}
+	
+
+	if (chiffre = 1010 || 1011)		//+ || -
+	{
+		if (progress = 2)  						//RESET
+		{
+			reset = 1
+		}
+		else
+		{
+			if (progress = 0 && registre_NB1(0) == 1111)		//r1 vide => signe
+			{
+				signNB1 = chiffre
+			}
+			elseif (progress = 1 && registre_NB2(0) == 1111)	//r2 vide => signe
+			{
+				signNB2 = chiffre
+			}
+			else 								//=> operation
+			{
+				progress = 1
+				if (chiffre = 1010)
+				{
+					OP = 00 					//+
+				}
+				else
+				{
+					OP = 01 					//-
+				}
+			}
+		}
+	modeReg1 = 0 								//ne change pas valNB1
+	modeReg2 = 0 								//ne change pas valNB2
+	}
+
+	if (chiffre = 1100)							//*
+	{
+		if (progress = 2)						//RESET
+		{
+			reset = 1
+		}
+		else
+		{
+			progress = 1
+			OP = 10 							//*
+		}
+	modeReg1 = 0 								//ne change pas valNB1
+	modeReg2 = 0 								//ne change pas valNB2
+	}
+
+	if (chiffre = 1101)							//delete
+	{
+		if (progress = 2)  						//RESET
+		{
+			reset = 1
+		}
+		elseif (progress = 0)
+		{	
+			modeReg1 = 1 						//decal right valNB1
+			modeReg2 = 0 						//ne change pas valNB2
+			valNB1(2) = 1111					//_
+		}
+		else									//progress = 1
+		{	
+			modeReg1 = 0 						//ne change pas valNB1
+			modeReg2 = 1 						//decal right valNB2
+			valNB2(2) = 1111					//_
+		}
+	}
+
+	if (chiffre = 1110)							//Calc
+	{
+		if (progress = 0)						//RESET
+		{	
+			reset = 1
+		}
+		elseif (progress = 1)					//calc
+		{	
+			progress = 2
+		}
+		//if progress = 2 => do nothing
+	modeReg1 = 0 								//ne change pas valNB1
+	modeReg2 = 0 								//ne change pas valNB2
+	}
+
+
+	if (chiffre = '1111' || reset = 1)			//reset
+	{
+		reset = 1
+        modeReg1 = 3;                 			//charge valeurs default de reg1
+        modeReg2 = 3;                 			//charge valeurs default de reg2								
+        										//registre_NB1 = +___
+												//registre_NB2 = +___
+		progress = '00'
+		OP = '11'								//_
+	}
+

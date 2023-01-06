@@ -44,16 +44,16 @@ use IEEE.numeric_std.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Registre is
+entity Regi4Univ is
 Port (
     RESET : IN std_logic;
     clk : IN std_logic;
-    InRegistre : IN STD_LOGIC_VECTOR (1 downto 0);
-    OutRegistre : OUT STD_LOGIC_VECTOR (1 downto 0)
+    InRegistre : IN STD_LOGIC_VECTOR (3 downto 0);
+    OutRegistre : OUT STD_LOGIC_VECTOR (3 downto 0)
 );
-end Registre;
+end Regi4Univ;
 
-architecture Behavioral of Registre is
+architecture Behavioral of Regi4Univ is
 
 begin
     CLK_front_montant : process (clk, RESET)

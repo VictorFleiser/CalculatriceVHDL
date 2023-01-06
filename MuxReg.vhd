@@ -30,7 +30,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Mux_1 is
+entity MuxReg is
     Port ( RESET : in STD_LOGIC;
            NONE : in STD_LOGIC_VECTOR (3 downto 0);
            LEFT : in STD_LOGIC_VECTOR (3 downto 0);
@@ -38,9 +38,9 @@ entity Mux_1 is
            LOAD : in STD_LOGIC_VECTOR (3 downto 0);
            Sel : in STD_LOGIC_VECTOR (1 downto 0);
            OUT_4 : out STD_LOGIC_VECTOR (3 downto 0));
-end Mux_1;
+end MuxReg;
 
-architecture Behavioral of Mux_1 is
+architecture Behavioral of MuxReg is
 
 begin
 SEL_modifie : process (Sel, RESET)

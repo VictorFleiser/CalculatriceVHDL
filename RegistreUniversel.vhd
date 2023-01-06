@@ -26,12 +26,15 @@ signal Q,Qplus:std_logic_vector(11 DOWNTO 11);
 begin
 process (Mode,InDecalLeftRegistre,InDecalRightRegistre,InRegistre,Qa,Qb,Qc,Da,Db,Dc)
 begin
-RegistreA: entity work.Regi4Univ(InRegistre=>Da,OutRegistre=>Qa);
-Registreb: entity work.Regi4Univ(InRegistre=>Db,OutRegistre=>Qb);
-Registrec: entity work.Regi4Univ(InRegistre=>Dc,OutRegistre=>Qc);
+RegistreA: entity work.Regi4Univ(clk=>clk,InRegistre=>Da,OutRegistre=>Qa);
+Registreb: entity work.Regi4Univ(clk=>clk,InRegistre=>Db,OutRegistre=>Qb);
+Registrec: entity work.Regi4Univ(clk=>clk,InRegistre=>Dc,OutRegistre=>Qc);
 
-MuxA: entity work.
+MuxA: entity work.MuxReg(NONE=>Qa,LEFT=>Qb,RIGHT=>InDecalRightRegistre,LOAD=>InRegistre(11 DOWNTO 8),Sel=>Mode,Out_4=>Da);
+Muxb: entity work.MuxReg(NONE=>Qb,LEFT=>Qc,RIGHT=>Qc,LOAD=>InRegistre(7 DOWNTO 4),Sel=>Mode,Out_4=>Db);
+Muxc: entity work.MuxReg(NONE=>Qc,LEFT=>InDecalLeftRegiste,RIGHT=>Qb,LOAD=>InRegistre(3 DOWNTO 0),Sel=>Mode,Out_4=>Dc);
 
+Q<=Qa&Qb&Qc;
 end process;
 
 process (clk,RESET)

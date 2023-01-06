@@ -24,18 +24,18 @@ architecture Behavioral of RegistreUniv is
 signal Qa,Qb,Qc,Da,Db,Dc:std_logic_vector(3 DOWNTO 0);
 signal Q,Qplus:std_logic_vector(11 DOWNTO 11);
 begin
-process (Mode,InDecalLeftRegistre,InDecalRightRegistre,InRegistre,Qa,Qb,Qc,Da,Db,Dc)
-begin
-RegistreA: entity work.Regi4Univ(clk=>clk,InRegistre=>Da,OutRegistre=>Qa);
-Registreb: entity work.Regi4Univ(clk=>clk,InRegistre=>Db,OutRegistre=>Qb);
-Registrec: entity work.Regi4Univ(clk=>clk,InRegistre=>Dc,OutRegistre=>Qc);
+--process (Mode,InDecalLeftRegistre,InDecalRightRegistre,InRegistre,Qa,Qb,Qc,Da,Db,Dc)
+--begin
+RegistreA: entity work.Regi4Univ port map(RESET=>RESET,clk=>clk,InRegistre=>Da,OutRegistre=>Qa);
+Registreb: entity work.Regi4Univ port map(RESET=>RESET,clk=>clk,InRegistre=>Db,OutRegistre=>Qb);
+Registrec: entity work.Regi4Univ port map(RESET=>RESET,clk=>clk,InRegistre=>Dc,OutRegistre=>Qc);
 
-MuxA: entity work.MuxReg(NONE=>Qa,LEFT=>Qb,RIGHT=>InDecalRightRegistre,LOAD=>InRegistre(11 DOWNTO 8),Sel=>Mode,Out_4=>Da);
-Muxb: entity work.MuxReg(NONE=>Qb,LEFT=>Qc,RIGHT=>Qc,LOAD=>InRegistre(7 DOWNTO 4),Sel=>Mode,Out_4=>Db);
-Muxc: entity work.MuxReg(NONE=>Qc,LEFT=>InDecalLeftRegiste,RIGHT=>Qb,LOAD=>InRegistre(3 DOWNTO 0),Sel=>Mode,Out_4=>Dc);
+MuxA : entity work.MuxReg port map (RESET=>reset,NONE=>Qa,LEFT=>Qb,RIGHT=>InDecalRightRegistre,LOAD=>InRegistre(11 DOWNTO 8),Sel=>Mode,Out_4=>Da);
+Muxb : entity work.MuxReg port map(RESET=>reset,NONE=>Qb,LEFT=>Qc,RIGHT=>Qc,LOAD=>InRegistre(7 DOWNTO 4),Sel=>Mode,Out_4=>Db);
+Muxc : entity work.MuxReg port map(RESET=>reset,NONE=>Qc,LEFT=>InDecalLeftRegistre,RIGHT=>Qb,LOAD=>InRegistre(3 DOWNTO 0),Sel=>Mode,Out_4=>Dc);
 
 Q<=Qa&Qb&Qc;
-end process;
+--end process;
 
 process (clk,RESET)
 begin

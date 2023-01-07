@@ -34,7 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Compt_1 is
     Port ( 
         RESET : in STD_LOGIC;
-        IN_100 : in STD_LOGIC;
+        clk : in STD_LOGIC;
         Out_1a1Hz : out STD_LOGIC);
 end Compt_1;
 
@@ -43,12 +43,12 @@ architecture Behavioral of Compt_1 is
 signal compteur_int : integer := 0;
 
 begin
-CLK_front_montant : process (IN_100, RESET)
+CLK_front_montant : process (clk, RESET)
     begin
     if (RESET ='1') then
         compteur_int <= 0;
     else
-        if (IN_100'EVENT and IN_100='1') then --front montant
+        if (clk'EVENT and clk='1') then --front montant
             compteur_int <= compteur_int + 1;
         end if;
         if (compteur_int = 50000000) then -- si = 10^8 /2

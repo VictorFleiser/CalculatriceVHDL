@@ -32,6 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity MuxReg is
     Port ( RESET : in STD_LOGIC;
+           clk : IN std_logic;
            NONE : in STD_LOGIC_VECTOR (3 downto 0);
            LEFT : in STD_LOGIC_VECTOR (3 downto 0);
            RIGHT : in STD_LOGIC_VECTOR (3 downto 0);
@@ -43,7 +44,7 @@ end MuxReg;
 architecture Behavioral of MuxReg is
 
 begin
-SEL_modifie : process (Sel, RESET)
+SEL_modifie : process (Sel, RESET, clk)
     begin
     if (RESET ='1') then
             OUT_4 <= "0000";

@@ -59,7 +59,7 @@ begin
     CLK_front_montant : process (clk, RESET)
     begin 
         if (RESET ='1') then    --Reset la valeur à 0
-            OutRegistre <= "00";
+            OutRegistre <= "0000";
         elsif (clk'EVENT and clk='1') then --front montant
             OutRegistre <= InRegistre;
         end if;

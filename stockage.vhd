@@ -32,7 +32,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity stockage is
-    Port ( RESET : out STD_LOGIC;
+    Port ( RESET : in STD_LOGIC;
+           --CalcReset : out STD_LOGIC;
            clk : in STD_LOGIC;
            Chiffre : in STD_LOGIC_VECTOR (3 downto 0);
            Nb1 : out STD_LOGIC_VECTOR (15 downto 0);
@@ -74,11 +75,15 @@ Nb2 <= registreNb2;
 
 registreProgress : entity work.registre port map (RESET => intRESET, clk => clk, InRegistre => intProgress, OutRegistre => Progress);
 registreOperator : entity work.registre port map (RESET => intRESET, clk => clk, InRegistre => intOperator, OutRegistre => Operator);
-registreUnivNb1 : entity work.RegistreUniv port map (RESET => intRESET, clk => clk, Mode => modeReg1, InRegistre => EntreRegistreNb1, InDecalLeftRegistre => InDecalLeftRegistreNb1, InDecalRightRegistre => InDecalRightRegistreNb, OutRegistre => registreNb1);
-registreUnivNb2 : entity work.RegistreUniv port map (RESET => intRESET, clk => clk, Mode => modeReg2, InRegistre => EntreRegistreNb2, InDecalLeftRegistre => InDecalLeftRegistreNb2, InDecalRightRegistre => InDecalRightRegistreNb, OutRegistre => registreNb2);
+registreUnivNb1 : entity work.RegistreUniv port map (RESET => intRESET, clk => clk, Mode => modeReg1, InRegistre => EntreRegistreNb1(11 downto 0), InDecalLeftRegistre => InDecalLeftRegistreNb1, InDecalRightRegistre => InDecalRightRegistreNb, OutRegistre => registreNb1(11 downto 0));
+registreUnivNb2 : entity work.RegistreUniv port map (RESET => intRESET, clk => clk, Mode => modeReg2, InRegistre => EntreRegistreNb2(11 downto 0), InDecalLeftRegistre => InDecalLeftRegistreNb2, InDecalRightRegistre => InDecalRightRegistreNb, OutRegistre => registreNb2(11 downto 0));
 
-fonctionement : process (clk)
+
+fonctionement : process (clk, chiffre, RESET)
 begin
+if (RESET ='1') then
+    intReset <= '0';
+else
 	if (Chiffre = "0000" or Chiffre = "0001" or Chiffre = "0010" or Chiffre = "0011" or Chiffre = "0100" or Chiffre = "0101" or Chiffre = "0110" or Chiffre = "0111" or Chiffre = "1000" or Chiffre = "1001") then	--nombre
 		if (intProgress = "10") then      --Progress = 2 => RESET
 			intReset <= '1';
@@ -149,12 +154,12 @@ begin
     end if;
 
 	if (Chiffre = "1111" or intReset = '1') then --reset
-		reset <= '1';
+		intReset <= '1';
         modeReg1 <= "11";                 --charge valeurs default de reg1
         modeReg2 <= "11";                 --charge valeurs default de reg2
 		intProgress <= "00";
 		intOperator <= "11";			  -- aucune valeur
 	end if;
-
+end if;
 end process fonctionement;
 end Behavioral;

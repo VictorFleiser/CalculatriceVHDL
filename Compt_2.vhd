@@ -2,7 +2,7 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 05.12.2022 10:24:17
+-- Create Date: 12/03/2022 03:29:44 PM
 -- Design Name: 
 -- Module Name: Compt_2 - Behavioral
 -- Project Name: 
@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,39 +32,53 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Compt_2 is
-    Port ( RESET : in STD_LOGIC;
-           IN_100 : in STD_LOGIC;
-           Sel : out STD_LOGIC_VECTOR (1 downto 0));
-end Compt_2;
+entity Compt_2cor is
+port (
+   clk: in std_logic;
+   Reset : in std_logic;
+   Sel : out std_logic_vector(1 downto 0)
+);
+end Compt_2cor;
 
-architecture Behavioral of Compt_2 is
+architecture Behavioral of Compt_2cor is
 
-signal compteur_int1 : integer := 0;
-signal compteur_int2 : STD_LOGIC_VECTOR(1 downto 0);
+signal compteur : std_logic_vector(15 downto 0);
+signal compteur1 : std_logic_vector(1 downto 0);
+signal out1_temp : std_logic;
 
 begin
-CLK_front_montant : process (IN_100, RESET)
-    begin
-    if (RESET ='1') then
-        compteur_int2 <= "00";
-    else
-        if (IN_100'EVENT and IN_100='1') then --front montant
-            compteur_int1 <= compteur_int1 + 1;
-        end if;
-        if (compteur_int1 = 1) then
-            compteur_int2 <= "01";
-        elsif (compteur_int1 = 2) then
-            compteur_int2 <= "10";
-        elsif (compteur_int1 = 3) then
-            compteur_int2 <= "11";
-        elsif (compteur_int1 = 4) then
-            compteur_int2 <= "00";
-            compteur_int1 <= 0;
-        end if;
-    end if;
-    end process CLK_front_montant;
-    
-    Sel <= compteur_int2;
-    
+
+Sel <= compteur1; 
+
+ process(clk, Reset) is
+ begin 
+  if Reset ='1' then 
+  compteur <= (others => '0' ); 
+  out1_temp <= '1';
+  elsif clk'event and clk = '1' then
+    if compteur < x"C34F" then 
+       compteur <= compteur + x"0001"; 
+    elsif compteur = x"C34F" then
+       compteur <= (others => '0' );
+       out1_temp <= not(out1_temp);
+    end if; 
+  end if;
+ end process; 
+
+process(out1_temp, reset) is
+begin
+ if Reset ='1' then 
+  compteur1 <= (others => '0' ); 
+  compteur1 <= "00";
+  elsif out1_temp'event and out1_temp = '1' then
+    if compteur1 < x"3" then 
+       compteur1 <= compteur1 + "01"; 
+    elsif compteur1 = "11" then
+       compteur1 <= (others => '0' );
+    end if; 
+  end if;
+
+end process; 
+
+
 end Behavioral;

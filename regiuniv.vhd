@@ -1,24 +1,3 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 31.12.2022 00:08:22
--- Design Name: 
--- Module Name: RegistreUniv - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -42,30 +21,23 @@ entity RegistreUniv is
 end RegistreUniv;
 
 architecture Behavioral of RegistreUniv is
-signal Q,Qplus:std_logic_vector(11 DOWNTO 0);
+signal Qa,Qb,Qc,Da,Db,Dc:std_logic_vector(3 DOWNTO 0);
+--signal Q :std_logic_vector(11 DOWNTO 0);
 begin
-process (Mode,InDecalLeftRegistre,InDecalRightRegistre,InRegistre,Q)
-begin
-if Mode="00" then --Mode est reglé sur None, rien ne se passe
-Qplus<=Q;
-elsif Mode="01" then --Mode est reglé sur Left
-Qplus<=InDecalLeftRegistre & Q(7 DOWNTO 0);
-elsif Mode="10" then --Mode est reglé sur Right
-Qplus<=Q(11 DOWNTO 4) & InDecalRightRegistre;
-else -- donc si mode vaut 11 alors Mode est reglé sur Load
-Qplus<=InRegistre;
-end if;
-end process;
+--process (Mode,InDecalLeftRegistre,InDecalRightRegistre,InRegistre,Qa,Qb,Qc,Da,Db,Dc)
+--begin
+RegistreA: entity work.Regi4Univ port map(RESET=>RESET,clk=>clk,InRegistre=>Da,OutRegistre=>Qa);
+Registreb: entity work.Regi4Univ port map(RESET=>RESET,clk=>clk,InRegistre=>Db,OutRegistre=>Qb);
+Registrec: entity work.Regi4Univ port map(RESET=>RESET,clk=>clk,InRegistre=>Dc,OutRegistre=>Qc);
 
-process (clk,RESET)
-begin
-if RESET= '0' then
-    if rising_edge(clk) then
-    Q<=Qplus;
-    end if;
-end if;
-end process;
-OutRegistre<=Q;
+MuxA : entity work.MuxReg port map (RESET=>reset,clk=>clk,NONE=>Qa,LEFT=>Qb,RIGHT=>InDecalRightRegistre,LOAD=>InRegistre(11 DOWNTO 8),Sel=>Mode,Out_4=>Da);
+Muxb : entity work.MuxReg port map(RESET=>reset,clk=>clk,NONE=>Qb,LEFT=>Qc,RIGHT=>Qa,LOAD=>InRegistre(7 DOWNTO 4),Sel=>Mode,Out_4=>Db);
+Muxc : entity work.MuxReg port map(RESET=>reset,clk=>clk,NONE=>Qc,LEFT=>InDecalLeftRegistre,RIGHT=>Qb,LOAD=>InRegistre(3 DOWNTO 0),Sel=>Mode,Out_4=>Dc);
+
+OutRegistre(3 downto 0)<=Qc;
+OutRegistre(7 downto 4)<=Qb;
+OutRegistre(11 downto 8)<=Qa;
+
 
 
 end Behavioral;

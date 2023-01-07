@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 28.12.2022 22:25:33
+-- Create Date: 28.11.2022 10:11:06
 -- Design Name: 
--- Module Name: commandes - Behavioral
+-- Module Name: Multiplieur - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,22 +32,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity commandes is
-    Port ( RESET : in STD_LOGIC;
-           clk : in STD_LOGIC;
-           Row : in Std_Logic_Vector (3 downto 0);
-           Col : out Std_Logic_Vector (3 downto 0);
-           Chiffre : out STD_LOGIC_VECTOR (3 downto 0));
-end commandes;
+entity MultiplieurBCD is
+Port (
+    RESET : IN STD_LOGIC;
+    clk : IN STD_LOGIC;
+    Nb1 : IN unsigned(15 downto 0);
+    Nb2 : IN unsigned(15 downto 0);
+    IntMult : OUT unsigned(15 downto 0)
+);
+end MultiplieurBCD;
 
-architecture Behavioral of commandes is
+architecture Behavioral of MultiplieurBCD is
 
---signal Row : Std_Logic_Vector (3 downto 0);
---signal Col : Std_Logic_Vector (3 downto 0);
+signal U : Std_Logic_Vector ( 3 downto 0);
 
 begin
 
-Codeur : entity work.Codeur port map (RESET => RESET, clk => clk, Row => Row, Col => Col, Chiffre => Chiffre);
--- comment connecter le clavier ? dans run implementation ?
+CalculProcess : process (clk, RESET)
+    begin
+    if (RESET ='1') then
+        IntMult <= "0000000000000000";
+    else
+        IntMult <= Nb1 * Nb2;
+	end if;
+    end process CalculProcess;
 
 end Behavioral;

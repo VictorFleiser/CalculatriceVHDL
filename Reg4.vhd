@@ -34,7 +34,7 @@ use IEEE.numeric_std.ALL;
 
 entity Reg4 is
 Port (
-    RESET, IN_100 : IN std_logic;
+    RESET, clk : IN std_logic;
     An_out : IN STD_LOGIC_VECTOR (3 downto 0);
     Anodex : OUT STD_LOGIC_VECTOR (3 downto 0)
 );
@@ -43,11 +43,11 @@ end Reg4;
 architecture Behavioral of Reg4 is
 
 begin
-    CLK_front_montant : process (IN_100, RESET)
+    CLK_front_montant : process (clk, RESET)
     begin 
         if (RESET ='1') then    --Reset la valeur à 0
             Anodex <= "0000";
-        elsif (IN_100'EVENT and IN_100='1') then --front montant
+        elsif (clk'EVENT and clk='1') then --front montant
             Anodex <= An_out;
         end if;
     end process CLK_front_montant ;

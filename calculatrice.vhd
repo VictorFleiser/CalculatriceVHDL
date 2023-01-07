@@ -33,12 +33,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity calculatrice is
     Port (
-           clk : in STD_LOGIC);
+           RESET : in STD_LOGIC;
+           clk : in STD_LOGIC;
+           Row : in Std_Logic_Vector (3 downto 0);
+           Col : out Std_Logic_Vector (3 downto 0);
+           Anodex : out STD_LOGIC_VECTOR(3 downto 0);
+           Sept_seg : out STD_LOGIC_VECTOR(6 downto 0)
+           );
 end calculatrice;
 
 architecture Behavioral of calculatrice is
 
-signal RESET : STD_LOGIC;
+--signal RESET : STD_LOGIC;
 signal Chiffre : Std_Logic_Vector (3 downto 0);
 signal Nb1 : Std_Logic_Vector (15 downto 0);
 signal Nb2 : Std_Logic_Vector (15 downto 0);
@@ -48,9 +54,9 @@ signal Progress : Std_Logic_Vector (1 downto 0);
 
 begin
 
-    commandes : entity work.commandes port map (RESET => RESET, clk => clk, Chiffre => Chiffre);
+    commandes : entity work.commandes port map (RESET => RESET, clk => clk, Row => Row, Col => Col, Chiffre => Chiffre);
     stockage : entity work.stockage port map (RESET => RESET, clk => clk, Chiffre => Chiffre, Nb1 => Nb1, Nb2 => Nb2, Operator => Operator, Progress => Progress);
-    calcul : entity work.calcul port map (RESET => RESET, clk => clk, Nb1 => Nb1, Nb2 => Nb2, Operator => Operator, Resultat => Resultat);
-    affichage : entity work.affichage port map (RESET => RESET, clk => clk, Nb1 => Nb1, Nb2 => Nb2, Resultat => Resultat, Progress => Progress);
+--    calcul : entity work.calcul port map (RESET => RESET, clk => clk, Nb1 => Nb1, Nb2 => Nb2, Operator => Operator, Resultat => Resultat);
+    affichage : entity work.affichage port map (RESET => RESET, clk => clk, Nb1 => Nb1, Nb2 => Nb2, Resultat => Resultat, Progress => Progress, Anodex => Anodex, Sept_seg => Sept_seg);
 
 end Behavioral;

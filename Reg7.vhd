@@ -34,20 +34,20 @@ use IEEE.numeric_std.ALL;
 
 entity Reg7 is
 Port (
-    RESET, IN_100 : IN std_logic;
-    OUT_7 : IN unsigned( 6 downto 0);
-    Sept_seg : OUT unsigned( 6 downto 0)
+    RESET, clk : IN std_logic;
+    OUT_7 : IN Std_Logic_Vector( 6 downto 0);
+    Sept_seg : OUT Std_Logic_Vector( 6 downto 0)
 );
 end Reg7;
 
 architecture Behavioral of Reg7 is
 
 begin
-    CLK_front_montant : process (IN_100, RESET)
+    CLK_front_montant : process (clk, RESET)
     begin 
         if (RESET ='1') then    --Reset la valeur à 0
             Sept_seg <= "0000000";
-        elsif (IN_100'EVENT and IN_100='1') then --front montant
+        elsif (clk'EVENT and clk='1') then --front montant
             Sept_seg <= OUT_7;
         end if;
     end process CLK_front_montant ;
